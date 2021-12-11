@@ -1,43 +1,32 @@
 import os
 import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import tensorflow as tf
+import pandas as pd
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+df = pd.read_csv('C:\\Users\\82104\\PycharmProjects\\main\\TEST\\data\\survey lung cancer.csv')
 
-import graphviz
-import itertools
+df['GENDER'] = df['GENDER'].map({'M': 1, 'F': 2})
+x = df.drop('LUNG_CANCER', axis=1)
+y = df.LUNG_CANCER
+y = y.map({'YES': 1, 'NO': 2})
 
-from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
-from sklearn import metrics
-from sklearn import tree
 
-df = pd.read_csv("C:\\Users\\operator09\\PycharmProjects\\Main\\TEST\\data\\Breast Cancer Wisconsin (Diagnostic) Data Set.csv")
-df = df.drop(['Unnamed: 32', 'id'], axis=1)
+x_train, x_valid, y_train, y_valid = train_test_split(x, y, test_size=0.2, random_state=42)
 
-df['daignosis'] = df['diagnosis'].map({'M': 1, 'B': 2})
-Y = df['diagnosis']
-X = df.drop('diagnosis', axis=1)
-"""
-M = df[df.diagnosis == "M"]
-B = df[df.diagnosis == "B"]
+model = tf.keras.models.Sequential([tf.keras.layers.Dense(64, activation='relu'),
+                                    tf.keras.layers.Dense(128, activation='relu'),
+                                    tf.keras.layers.Dense(256, activation='relu'),
+                                    tf.keras.layers.Dropout(0.5),
+                                    tf.keras.layers.Dense(64, activation='relu'),
+                                    tf.keras.layers.Dense(1, activation='sigmoid')
+                                    ])
 
-plt.scatter(M.radius_mean,M.texture_mean,color='red',label='Malign',alpha=0.3)
-plt.scatter(B.radius_mean,B.texture_mean,color='green',label='Benign',alpha=0.3)
-plt.xlabel("radius_mean")
-plt.ylabel("texture_mean")
-plt.legend()
-plt.show()
-
-fig, axes = plt.subplots(1,2, figsize=(15,5))
-sns.boxplot(ax = axes[0], x=df.diagnosis, y=df['area_mean'],palette='turbo')
-axes[0].set_title("Size difference")
-
-sns.boxplot(ax = axes[1],x=df.diagnosis, y=df['perimeter_mean'],palette="PRGn")
-axes[1].set_title("Size Difference")
-
-plt.show()
-"""
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+model.fit(np.array(x_train), np.array(y_train), validation_data=(np.array(x_valid), np.array(y_valid)), epochs=5)
+pred = [[1, 23, 2, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 2]]
+predition = model.predict(pred)
+print("당신이 암에걸릴확률은 {}".format(predition))
