@@ -19,14 +19,13 @@ xdata['ST_Slope'] = xdata['ST_Slope'].map({'Up': 0, 'Flat': 1, 'Down': 2})
 
 xdata = np.array(xdata)
 ydata = np.array(ydata)
-
-print(ydata.shape)
-exit()
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(xdata, ydata, test_size=0.2)
 def heart_model():
     model = tf.keras.models.Sequential([tf.keras.layers.Dense(64, activation='relu'),
                                         tf.keras.layers.Dense(128, activation='relu'),
                                         tf.keras.layers.Dense(256, activation='relu'),
-                                        tf.keras.layers.Dropout(0.2),
+                                        tf.keras.layers.Dropout(0.3),
                                         tf.keras.layers.Dense(64, activation='relu'),
                                         tf.keras.layers.Dense(1, activation='sigmoid')
                                         ])
@@ -37,11 +36,13 @@ def heart_model():
 
 model = heart_model()
 
-model.fit(xdata, ydata, epochs=1000)
-result = model.evaluate(xdata, ydata, verbose=2)
+model.fit(x_train, y_train, epochs=100)
+result = model.evaluate(x_test, y_test, verbose=2)
 
 patient = [[40, 0, 0, 140, 289, 0, 0, 172, 0, 0, 0]]
 pred = model.predict(patient)
+pred = int(pred)
 
-print(pred)
+print("이환자가 암에걸릴 확률은 {:.2f}이다".format(pred)
+)
 print(result)
