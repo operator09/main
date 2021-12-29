@@ -23,3 +23,9 @@ with mp_face_mesh.FaceMesh(
     if cv2.waitKey(5) & 0xFF == 27:
       break
 
+https://www.youtube.com/watch?v=eHxDWhtbRCk&t=431s
+https://www.youtube.com/watch?v=sG_WeGbZ9A4
+https://www.youtube.com/watch?v=WgsZc_wS2qQ
+
+https://google.github.io/mediapipe/solutions/face_detection.html
+https://google.github.io/mediapipe/solutions/hands.html
