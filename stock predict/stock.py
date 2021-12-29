@@ -18,7 +18,8 @@ result = []
 for idx in range(len(mid_prices)-sequence_length):
     result.append(mid_prices[idx: idx+sequence_length])
 
-normalized_data =[]
+normalized_data = []
+
 for window in result:
     normalized_window=[((float(p)/float(window[0]))-1)for p in window]
     normalized_data.append(normalized_window)
@@ -43,7 +44,7 @@ model.add(LSTM(50, return_sequences=True, input_shape=(50, 1)))
 model.add(LSTM(64, return_sequences=False))
 model.add(Dense(1, activation='linear'))
 
-model.compile(loss='mse',optimizer='rmsprop')
+model.compile(loss='mse', optimizer='adam')
 
 model.fit(x_train, y_train, validation_data=(x_test, y_test), batch_size=10, epochs=20)
 
