@@ -18,7 +18,7 @@ hands = mp_hands.Hands(
 )
 
 file = np.genfromtxt(
-    'data/gesture_train.csv'
+    'gesture_train.csv'
 ,delimiter=',')
 angle = file[:,:-1].astype(np.float32)
 label = file[:, -1].astype(np.float32)
