@@ -12,9 +12,9 @@ model = load_model('models/mask_detector.model')
 
 cap = cv2.VideoCapture(0)
 ret, img = cap.read()
-
-fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-out = cv2.VideoWriter('output.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), (img.shape[1], img.shape[0]))
+"""
+ret은 비디오가 잘되는지 못읽으면 false가 되고 읽으면 true 가 된다.
+img는 프레임이다."""
 
 while cap.isOpened():
     ret, img = cap.read()
@@ -26,7 +26,7 @@ while cap.isOpened():
     blob = cv2.dnn.blobFromImage(img, scalefactor=1., size=(300, 300), mean=(104., 177., 123.))
     facenet.setInput(blob)
     dets = facenet.forward()
-
+    """여기까지 학습했음."""
     result_img = img.copy()
 
     for i in range(dets.shape[2]):
@@ -59,10 +59,8 @@ while cap.isOpened():
         cv2.putText(result_img, text=label, org=(x1, y1 - 10), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.8,
                     color=color, thickness=2, lineType=cv2.LINE_AA)
 
-    out.write(result_img)
     cv2.imshow('result', result_img)
     if cv2.waitKey(1) == ord('q'):
         break
 
-out.release()
 cap.release()
