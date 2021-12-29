@@ -10,15 +10,15 @@ secs_for_action = 30
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands(
-    max_num_hands = 1,
-    min_detection_confidence = 0.5,
-    min_tracking_confidence = 0.5
+    max_num_hands=1,
+    min_detection_confidence=0.5,
+    min_tracking_confidence=0.5
 )
 
 cap = cv2.VideoCapture(0)
 
 created_time = int(time.time())
-os.makedirs('dataset', exist_ok=True)
+os.makedirs('./dataset', exist_ok=True)
 
 while cap.isOpened():
     for idx, action in enumerate(actions):
@@ -76,7 +76,7 @@ while cap.isOpened():
 
         data = np.array(data)
         print(action, data.shape)
-        np.save(os.path.join('dataset', f'raw_{action}_{created_time}'). data)
+        np.save(os.path.join('dataset', f'raw_{action}_{created_time}'), data)
 
         full_seq_data = []
         for seq in range(len(data) - seq_length):
